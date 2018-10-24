@@ -45,7 +45,7 @@ String Database::getStateString(byte state){
       return select;
     break;
     case 6:
-      return "BPS ";
+      return "BPM ";
     break;
   }
 }

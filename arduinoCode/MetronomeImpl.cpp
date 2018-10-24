@@ -30,13 +30,13 @@ MetronomeImpl::MetronomeImpl(short pin)
 {
   this->pin = pin;
   pinMode(this->pin, OUTPUT);
-  this->bps = DEFAULT_BPS;
-  this->beatsPerCycle = DEFAULT_BPS_C;
+  this->bpm = DEFAULT_BPM;
+  this->beatsPerCycle = DEFAULT_BPM_C;
 }
 
 void MetronomeImpl::init()
 {
-  TaskPeriod::init(60000 / this->bps);  //60000 ms in a s
+  TaskPeriod::init(60000 / this->bpm);  //60000 ms in a s
 }
 
 /**
@@ -57,13 +57,13 @@ bool MetronomeImpl::tick()
 }
 
 /**
-    Add a STEP at the metronome bps period up to the maximum.
+    Add a STEP at the metronome bpm period up to the maximum.
 */
-void MetronomeImpl::updateBPS()
+void MetronomeImpl::updateBPM()
 {
-  this->bps = (this->bps+STEP)%(MAX_BPS+STEP);
-  if(this->bps == 0)
-    this->bps = MIN_BPS;
+  this->bpm = (this->bpm+STEP)%(MAX_BPM+STEP);
+  if(this->bpm == 0)
+    this->bpm = MIN_BPM;
 }
 
 /**
@@ -76,9 +76,9 @@ void MetronomeImpl::updateBeatsPCycle()
     this->beatsPerCycle = 1;
 }
 
-short MetronomeImpl::getBPS()
+short MetronomeImpl::getBPM()
 {
-  return this->bps;
+  return this->bpm;
 }
 
 byte MetronomeImpl::getBeatsPCycle()
@@ -90,8 +90,8 @@ byte MetronomeImpl::getBeatsPCycle()
 void MetronomeImpl::reset()
 {
   this->currentBeatOnCycle = 0;
-  this->bps = DEFAULT_BPS;
-  this->beatsPerCycle = DEFAULT_BPS_C;
+  this->bpm = DEFAULT_BPM;
+  this->beatsPerCycle = DEFAULT_BPM_C;
 }
 
 

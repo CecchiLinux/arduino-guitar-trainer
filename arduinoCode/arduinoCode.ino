@@ -154,7 +154,7 @@ void loop() {
  *                | - Maj, Nat. Min, Pent. Min
  *                    \ + VISUALIZE
  *                      \ + METRONOME
- *                        | - SELECT BPS
+ *                        | - SELECT BPM
  *                          | - 20, 40, 60, 80, 120, 160, 180, 200, 220
  *                        | - SELECT BEATS PER CYCLE
  *                          | - 1, 2, 3, 4, 5, 6, 7, 8  
@@ -442,7 +442,7 @@ void step() {
         /*------------------------ 6. METRONOME / BEATS ---------------------*/
         case BEATS:
           if(isJustEntered()){
-            my_display->show(db.getStateString(METRONOME) + " BPS", String(metronome.getBPS()));
+            my_display->show(db.getStateString(METRONOME) + " BPM", String(metronome.getBPM()));
           }
           if(buttonG.isPressed() && my_debounce()){     // Green button pressed (SELECT)
             justEntered = true;
@@ -450,7 +450,7 @@ void step() {
           }
           if(buttonY.isPressed() && my_debounce()){     // Yellow button pressed (CHANGE)
             justEntered = true;
-            metronome.updateBPS();
+            metronome.updateBPM();
           }
           if(buttonR.isPressed() && my_debounce()){     // Red button pressed (BACK)
             justEntered = true;
@@ -485,7 +485,7 @@ void step() {
         /*------------------------7. PLAY / CHORDS----------------------------------------*/
         case CHORDS:
           if(isJustEntered()){
-            my_display->show(db.getStateString(PLAY) + String(metronome.getBPS()), currentChord->getName());
+            my_display->show(db.getStateString(PLAY) + String(metronome.getBPM()), currentChord->getName());
           }
           if (metronome.updateAndCheckTime(BASE_PERIOD)) {
             metronome.tick();
@@ -502,13 +502,13 @@ void step() {
         /*------------------------7. PLAY / CP --------------------------------*/
         case CP:
           if(isJustEntered()){
-            my_display->show(db.getStateString(PLAY) + String(metronome.getBPS()), "");
+            my_display->show(db.getStateString(PLAY) + String(metronome.getBPM()), "");
           }
           if (metronome.updateAndCheckTime(BASE_PERIOD)) {
             // db.getChord(currentChord, my_instrument->getName(), currentChordsProg->getChord(iState2List)); 
             if(metronome.tick()){
               db.getChord(currentChord, my_instrument->getName(), currentChordsProg->getNext());
-              my_display->show(db.getStateString(PLAY) + String(metronome.getBPS()), currentChord->getName());
+              my_display->show(db.getStateString(PLAY) + String(metronome.getBPM()), currentChord->getName());
               my_instrument->clearNeck();
               my_instrument->show_chord(currentChord);
             }
@@ -527,12 +527,12 @@ void step() {
         /*------------------------7. PLAY / SCALES -------------------------------*/
         case SCALES:
           if(isJustEntered()){
-            my_display->show(db.getStateString(PLAY) + String(metronome.getBPS()), db.getNote(iState1List));
+            my_display->show(db.getStateString(PLAY) + String(metronome.getBPM()), db.getNote(iState1List));
           }
           if(metronome.updateAndCheckTime(BASE_PERIOD)) {
             metronome.tick();
             currentNote = my_instrument->play_scale(currentScale);
-            my_display->show(db.getStateString(PLAY) + String(metronome.getBPS()), currentNote);
+            my_display->show(db.getStateString(PLAY) + String(metronome.getBPM()), currentNote);
           }
           if(buttonR.isPressed() && my_debounce()){     // Red button pressed (BACK)
             justEntered = true;

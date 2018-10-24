@@ -24,16 +24,16 @@
 #include "Metronome.h"
 
 #define STEP 20
-#define DEFAULT_BPS 60
-#define DEFAULT_BPS_C 4
-#define MAX_BPS 220
-#define MIN_BPS 20
+#define DEFAULT_BPM 60
+#define DEFAULT_BPM_C 4
+#define MAX_BPM 220
+#define MIN_BPM 20
 #define MAX_CYCLE 8
 
 class MetronomeImpl: public Metronome{
   private:
     short pin;
-    short bps;
+    short bpm;
     byte beatsPerCycle;
     byte currentBeatOnCycle = 0;
       
@@ -43,10 +43,10 @@ class MetronomeImpl: public Metronome{
     bool tick();
     void setBeatsPCycle();
     void reset();
-    void updateBPS();
+    void updateBPM();
     void updateBeatsPCycle();
 
-    short getBPS();
+    short getBPM();
     byte getBeatsPCycle();
 
 };

@@ -25,7 +25,7 @@
 class Metronome: public TaskPeriod{
   public:
     virtual bool tick();
-    virtual short getBPS();
+    virtual short getBPM();
     virtual byte getBeatsPCycle();
 
 };

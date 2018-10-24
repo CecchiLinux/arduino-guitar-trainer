@@ -57,12 +57,12 @@ Tra i vincoli troviamo:
 
 Gli esercizi provengono da diverse fonti. 
 
-- **Giri armonici:** esercizi provenienti da: "Esercizi a giro armonico in tutti i toni" presente in un libro scolastico[1]. Impostando i bps e il numero di movimenti per battuta, suonare l'accordo ad ogni battito, passando al prossimo quando occorre il primo moviemento (suono distinto dal metronomo).
-- **Riscaldamento:**  esercizi provenienti da un blog musicale[2]. Vengono definite una serie di scale le cui note sono posizionate nei primi quattro tasti della chitarra. Impostando i bps, suonare una nota della scala ad ogni battito.
+- **Giri armonici:** esercizi provenienti da: "Esercizi a giro armonico in tutti i toni" presente in un libro scolastico[1]. Impostando i bpm e il numero di movimenti per battuta, suonare l'accordo ad ogni battito, passando al prossimo quando occorre il primo moviemento (suono distinto dal metronomo).
+- **Riscaldamento:**  esercizi provenienti da un blog musicale[2]. Vengono definite una serie di scale le cui note sono posizionate nei primi quattro tasti della chitarra. Impostando i bpm, suonare una nota della scala ad ogni battito.
   - partendo dal I tasto: 1 2 4 3, 1 3 2 4, 1 3 4 2, 1 4 2 3, 1 4 3 2
   - partendo dal II tasto: 1 3 2 4, 1 3 2 4, 1 3 2 4, 1 3 2 4, 1 3 2 4
   - partendo dal III tasto: 1 4 2 3, 1 4 2 3, 1 4 2 3, 1 4 2 3, 1 4 2 3
-- **Scale:** esercizi provenienti da un blog musicale[3]. Vengono definite una serie di scale, selezionando tonalità e bps, suonare una nota della scala ad ogni battito.
+- **Scale:** esercizi provenienti da un blog musicale[3]. Vengono definite una serie di scale, selezionando tonalità e bpm, suonare una nota della scala ad ogni battito.
   - scala maggiore
   - scala naturale minore
   - pentatonica minore
@@ -202,9 +202,9 @@ Si è deciso di modellare il comportamento tramite una macchina a stati finiti s
   - Scala: visualizzare le note che fanno parte di essa
 
 - **METRONOME:**
-  Questo stato è dedicato alla selezione dei BPS e del numero di battiti per ciclo.
+  Questo stato è dedicato alla selezione dei BPM e del numero di battiti per ciclo.
 
-  - BPS: 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220
+  - BPM: 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220
   - Battiti per ciclo: 1, 2, 3, 4, 5, 6, 7, 8
 
 - **PLAY:**
@@ -336,7 +336,7 @@ La classe ***Scale*** rappresenta una scala musicale che si trova sulla tastiera
 
 
 
-La classe ***Metronome*** rappresenta un metronomo ad utilizzo musicale. Implementando l'interfaccia TaskPeriod, il metronomo corrisponde ad un task il cui metodo tick viene eseguito con un periodo che corisponde al numero di bps.  L'attributo *beatsPerCycle*  definisce il numero di movimenti della battuta. Per sottolineare il primo (es. primo quarto della battuta), il metodo *tick* suona una nota diversa dalle altre.
+La classe ***Metronome*** rappresenta un metronomo ad utilizzo musicale. Implementando l'interfaccia TaskPeriod, il metronomo corrisponde ad un task il cui metodo tick viene eseguito con un periodo che corisponde al numero di bpm.  L'attributo *beatsPerCycle*  definisce il numero di movimenti della battuta. Per sottolineare il primo (es. primo quarto della battuta), il metodo *tick* suona una nota diversa dalle altre.
 
 
 
