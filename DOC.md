@@ -2,7 +2,7 @@
 
 Progetto per il corso di Laboratorio di Making, anno 2017/2018.
 
-Studente: **Ceccolini Enrico**  800490
+Studente:  **Enrico Ceccolini**  800490
 
 
 
@@ -53,6 +53,8 @@ Tra i vincoli troviamo:
 
 
 
+</br></br>
+
 ### 1.2. Gli esericizi
 
 Gli esercizi provengono da diverse fonti. 
@@ -93,11 +95,11 @@ Per la realizzazione dell' AGT sono stati utilizzati:
 
 Si è deciso che ogni shift register controlli una corda, in questo modo è possibile realizzare un circuito base, che poi potrà essere replicato per ottenere le corde successive.
 
-![Scheme](./imgs/Scheme.png)
+<img src="./imgs/Scheme.png" alt="drawing" width="500"/>
 
 
 
-Grazie allo shift register sarà possibile pilotare singolarmente ognuno degli 8 led, utilizzando solamente 3 pin di arduino (2 pwm e uno no). Gli integrati 74HC595 prevedono poi una caratteristica decisamente utile cioè quella di poter essere collegati in cascata in modo da simulare dei registri a 16, 24, 32, ... bit. Nel passaggio allo schema su basetta millefori, verranno disposti in fila indiana per semplificare il collegamento in serie e permettere di controllare tutti i led di tutte le "corde" con solo 3 pin dell'Arduino (si veda appendice A).
+Grazie allo shift register sarà possibile pilotare singolarmente ognuno degli 8 led, utilizzando solamente 3 pin di arduino (2 pwm e uno no). Gli integrati 74HC595 prevedono poi una caratteristica decisamente utile cioè quella di poter essere collegati in cascata in modo da simulare dei registri a 16, 24, 32, ... bit. Nel passaggio allo schema su basetta millefori, verranno disposti in fila indiana per semplificare il collegamento in serie e permettere di controllare tutti i led di tutte le "corde" con solo 3 pin dell'Arduino (per un approfondimento si veda l'appendice A).
 
 
 
@@ -142,13 +144,13 @@ Elenco dei componenti utilizzati per corda (partendo dalla fila in alto nella pr
 
 #### 2.3. Costruzione della scocca
 
-
-
-![neck](./imgs/collage.jpg)
+<img src="./imgs/collage2.jpg" alt="drawing" width="600"/>
 
 
 
-![IMG_3345red2](./imgs/IMG_3345red2.JPG)
+<img src="./imgs/IMG_3345red2.JPG" alt="drawing" width="600"/>
+
+
 
 
 
@@ -220,32 +222,27 @@ La macchina a stati sincrona, è stata implementata seguendo la tecnica utilizza
 
 ``` c++
 /** arduino-guitar-trainer.ino */
+...
 
-#include "Timer.h"
-#define BASE_PERIOD 50  // clock tick period
-Timer timer;
+void setup() { timer.setupPeriod(BASE_PERIOD); ... }
 
-void setup() {
-    ...
-    timer.setupPeriod(BASE_PERIOD);  //timer's period is set to 50ms
-}
+/* variable keeping track of the state */
+enum{START, ES_SELECTION, TONE_SELECTION, ..., VISUALIZE, METRONOME, PLAY} state;
 
 void loop() {
-    /* wait for timer signal */
-    timer.waitForNextTick();
+    timer.waitForNextTick(); // wait for timer signal
     step();
 }
 
+/* procedure implementing the step of the state machine */
 void step() {
 	switch (state) {
-        case START:
-              ...
+        case START: ...
         break;     
         ....
         case PLAY:
             switch (esState) {
-                case CHORDS:
-                    ...
+                case CHORDS: ...
                 break;
                 ...
              break;
@@ -256,7 +253,7 @@ void step() {
 
 
 
-La gestione del tempo è stata implementata basandosi sull'utilizzo dell'interruzione di timer programmabili presenti su Arduino.
+La gestione del tempo è stata implementata basandosi sull'utilizzo dell'interruzione di timer programmabili presenti su Arduino ( per un approfondimento si veda l'appendice B).
 
 ```c++
 void Timer::setupPeriod(int period){
@@ -370,8 +367,6 @@ Come sviluppo futuro lo strumento AGT potrebbe evolvere e incorporare anche lezi
 
 
 
-
-
 ## Appendice A - 74HC595 ShiftRegister
 
 Il chip 74HC595 corrisponde ad uno ShiftRegister (registro a scorrimento) a 8 bit[4]. Uno ShiftRegister consente di impostare il valore logico dei suoi pin di uscita (parallel out), inviando i valori un bit alla volta sul pin di entrata (serial in).
@@ -432,6 +427,38 @@ void ShiftRegister::refreshShiftRegister(){
   digitalWrite(this->latchPin, HIGH);
 }
 ```
+
+
+
+
+
+## Appendice B - Mapping macchine sincrone
+
+Il comportamento di una macchina a stati sincrona viene tipicamente descritto su sistemi a microncontrollore utilizzando l'interruzione di Timer programmabili. Questi, inclusi nel microcontrollor o sulla scheda, permettono di generare un segnali di interruzione periodico.
+
+Arduino UNO ha tre timer interni (timer0, timer1 e timer2). Ognuno dei timer ha un contatore che è incrementato ad ogni tick del clock del timer (timer0  e timer2 hanno contatori a 8 bit, timer 1 a 16 bit).
+
+Tra le modalità di gestione delle interruzioni troviamo la CTC (Clear Timer on Compare Match). Questa genera le interruzioni quando il contatore raggiunge un certo valore specificato dal programmatore.
+
+Sapendo che il contatore del timer è aggiornato a 16 MHz occorre calcolare il valore da inserire nel registro compare match in modo da specificare la corretta frequenza con cui devono avvenire le interruzioni.
+
+Specificando un valore di prescaler è possibile modulare la frequenza di aggiornamento del contatore. 
+
+``` c++
+// timer speed (Hz) = Arduino clock speed (16MHz) / prescaler
+timer_speed = 16,000,000 / prescaler
+```
+
+I valori di prescaler possono essere 1, 8, 64, 256 e 1024. Selezionando un valore di 1024 si ottiene una frequenza di aggiornamento di 16 KHz che equivale ad un incremento ogni 1/16,000 di un secondo.
+
+**Esempio**: Supponiamo di volere una interruzione al secondo, ovvero alla frequenza di 1 Hz.
+
+``` c++
+// compare match register = (16,000,000 / (prescaler * 1)) -1
+compare_match_register = (16,000,000 / (1024 * 1)) - 1 = 15,624
+```
+
+Siccome il valore è maggiore di 256 però inferiore a 65536, possiamo usare il timer1.
 
 
 

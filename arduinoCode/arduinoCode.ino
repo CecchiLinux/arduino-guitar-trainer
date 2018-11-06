@@ -57,7 +57,7 @@
 
 #define Reset_AVR() wdt_enable(WDTO_30MS); while(1) {} 
 
-// program states and substate
+/* variable keeping track of the state and substate*/
 enum{START, ES_SELECTION, TONE_SELECTION, TYPE_SELECTION, VISUALIZE, METRONOME, PLAY} state;
 enum{CHORDS, CP, SCALES, WARM_UP} esState;
 enum{BEATS, CYCLE} stateMetronome;
@@ -123,11 +123,8 @@ void setup() {
   // iState2List = 0;
   justEntered = true;
   lastDebounceTime = 0; 
-  }
+}
 
-/*
- * 
- */
 void loop() { 
   /* wait for timer signal */
   timer.waitForNextTick();
@@ -139,7 +136,7 @@ void loop() {
 }
 
 /*
- * Simulate a state machine
+ * procedure implementing the step of the state machine
  * 
  * START
  *  \ + ES_SELECTION
